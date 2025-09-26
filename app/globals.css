@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Professional Finance Theme - Wall Street meets Crypto */
+  --color-bg: hsl(220, 30%, 8%);
+  --color-fg: hsl(210, 20%, 95%);
+  --color-accent: hsl(45, 100%, 50%);
+  --color-primary: hsl(210, 70%, 53%);
+  --color-surface: hsl(220, 25%, 12%);
+  --color-border: hsl(220, 20%, 20%);
+  --color-success: hsl(120, 60%, 50%);
+  --color-warning: hsl(45, 100%, 60%);
+  --color-error: hsl(0, 70%, 60%);
+}
+
+[data-theme="celo"] {
+  --color-bg: hsl(0, 0%, 0%);
+  --color-fg: hsl(0, 0%, 100%);
+  --color-accent: hsl(45, 95%, 55%);
+  --color-primary: hsl(45, 95%, 55%);
+  --color-surface: hsl(0, 0%, 5%);
+  --color-border: hsl(0, 0%, 20%);
+  --color-success: hsl(120, 60%, 50%);
+  --color-warning: hsl(45, 100%, 60%);
+  --color-error: hsl(0, 70%, 60%);
+}
+
+[data-theme="solana"] {
+  --color-bg: hsl(260, 30%, 8%);
+  --color-fg: hsl(260, 20%, 95%);
+  --color-accent: hsl(280, 80%, 60%);
+  --color-primary: hsl(280, 70%, 53%);
+  --color-surface: hsl(260, 25%, 12%);
+  --color-border: hsl(260, 20%, 20%);
+  --color-success: hsl(120, 60%, 50%);
+  --color-warning: hsl(45, 100%, 60%);
+  --color-error: hsl(0, 70%, 60%);
+}
+
+[data-theme="base"] {
+  --color-bg: hsl(220, 40%, 8%);
+  --color-fg: hsl(220, 20%, 95%);
+  --color-accent: hsl(220, 100%, 50%);
+  --color-primary: hsl(220, 100%, 50%);
+  --color-surface: hsl(220, 35%, 12%);
+  --color-border: hsl(220, 30%, 20%);
+  --color-success: hsl(120, 60%, 50%);
+  --color-warning: hsl(45, 100%, 60%);
+  --color-error: hsl(0, 70%, 60%);
+}
+
+[data-theme="coinbase"] {
+  --color-bg: hsl(220, 50%, 6%);
+  --color-fg: hsl(220, 20%, 95%);
+  --color-accent: hsl(220, 100%, 50%);
+  --color-primary: hsl(220, 100%, 50%);
+  --color-surface: hsl(220, 45%, 10%);
+  --color-border: hsl(220, 40%, 18%);
+  --color-success: hsl(120, 60%, 50%);
+  --color-warning: hsl(45, 100%, 60%);
+  --color-error: hsl(0, 70%, 60%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-bg text-fg font-sans antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-surface border border-border rounded-lg backdrop-blur-sm;
+    background: linear-gradient(135deg, 
+      hsla(var(--color-surface), 0.8) 0%, 
+      hsla(var(--color-surface), 0.4) 100%);
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-accent to-primary text-bg px-6 py-3 rounded-lg font-medium hover:from-primary hover:to-accent transition-all duration-200 shadow-lg hover:shadow-xl;
+  }
+
+  .btn-secondary {
+    @apply bg-surface border border-border text-fg px-6 py-3 rounded-lg font-medium hover:bg-opacity-80 transition-all duration-200;
+  }
+
+  .metric-card {
+    @apply glass-card p-6 hover:bg-opacity-60 transition-all duration-200;
+  }
+
+  .progress-bar {
+    @apply w-full bg-surface rounded-full h-3 overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply h-full bg-gradient-to-r from-success to-accent transition-all duration-300 ease-out;
+  }
+}
