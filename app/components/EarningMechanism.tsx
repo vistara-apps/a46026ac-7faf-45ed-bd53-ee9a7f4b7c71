@@ -40,10 +40,47 @@ export function EarningMechanism() {
     }
   ]);
 
-  const toggleEarning = (id: string) => {
-    setEarningOptions(prev => prev.map(option => 
-      option.id === id ? { ...option, enabled: !option.enabled } : option
+  const toggleEarning = async (id: string) => {
+    const newEnabled = !earningOptions.find(opt => opt.id === id)?.enabled;
+
+    // Update local state immediately for better UX
+    setEarningOptions(prev => prev.map(option =>
+      option.id === id ? { ...option, enabled: newEnabled } : option
     ));
+
+    // Update user settings via API
+    try {
+      const updateData: any = { userId: 'fc_fid_123' };
+
+      if (id === 'tracker-blocking') {
+        // This is always enabled for basic functionality
+        return;
+      } else if (id === 'attention-focus') {
+        updateData.optedInDataFlags = { attentionData: newEnabled };
+      } else if (id === 'data-sharing') {
+        updateData.optedInDataFlags = { anonymizedBrowsing: newEnabled };
+      }
+
+      const response = await fetch('/api/user', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updateData),
+      });
+
+      if (!response.ok) {
+        console.error('Failed to update user settings');
+        // Revert local state on error
+        setEarningOptions(prev => prev.map(option =>
+          option.id === id ? { ...option, enabled: !newEnabled } : option
+        ));
+      }
+    } catch (error) {
+      console.error('Error updating earning settings:', error);
+      // Revert local state on error
+      setEarningOptions(prev => prev.map(option =>
+        option.id === id ? { ...option, enabled: !newEnabled } : option
+      ));
+    }
   };
 
   return (

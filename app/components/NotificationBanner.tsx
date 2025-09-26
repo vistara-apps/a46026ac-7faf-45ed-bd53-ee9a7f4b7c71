@@ -10,32 +10,41 @@ interface NotificationBannerProps {
   duration?: number;
 }
 
-export function NotificationBanner({ 
-  variant = 'info', 
+export function NotificationBanner({
+  variant = 'info',
   message,
   autoHide = true,
-  duration = 5000 
+  duration = 5000
 }: NotificationBannerProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [currentMessage, setCurrentMessage] = useState(message);
+  const [currentVariant, setCurrentVariant] = useState(variant);
 
   useEffect(() => {
-    // Simulate notifications
-    const notifications = [
-      { type: 'success', text: 'Earned 0.05 TT tokens for blocking trackers!' },
-      { type: 'info', text: 'New privacy feature available in settings' },
-      { type: 'error', text: 'Data breach detected for example.com' }
-    ];
+    const fetchNotifications = async () => {
+      try {
+        const response = await fetch('/api/notifications?userId=fc_fid_123&unreadOnly=true');
+        if (response.ok) {
+          const notifications = await response.json();
+          if (notifications.length > 0) {
+            const latestNotification = notifications[0];
+            setCurrentMessage(latestNotification.message);
+            setCurrentVariant(latestNotification.type === 'dataBreach' ? 'error' :
+                            latestNotification.type === 'tokenUpdate' ? 'success' : 'info');
+            setIsVisible(true);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+      }
+    };
 
     if (!message) {
-      const interval = setInterval(() => {
-        if (Math.random() > 0.7) {
-          const randomNotification = notifications[Math.floor(Math.random() * notifications.length)];
-          setCurrentMessage(randomNotification.text);
-          setIsVisible(true);
-        }
-      }, 10000);
+      // Initial fetch
+      fetchNotifications();
 
+      // Poll for new notifications every 15 seconds
+      const interval = setInterval(fetchNotifications, 15000);
       return () => clearInterval(interval);
     }
   }, [message]);
@@ -53,7 +62,7 @@ export function NotificationBanner({
   if (!isVisible || !currentMessage) return null;
 
   const getIcon = () => {
-    switch (variant) {
+    switch (currentVariant) {
       case 'error':
         return <AlertTriangle className="w-5 h-5 text-error" />;
       case 'success':
@@ -64,7 +73,7 @@ export function NotificationBanner({
   };
 
   const getBgColor = () => {
-    switch (variant) {
+    switch (currentVariant) {
       case 'error':
         return 'bg-error/10 border-error/20';
       case 'success':
