@@ -1,0 +1,14 @@
+{
+  "name": "Tracker Tokens",
+  "description": "Tracker Tokens is a Base Mini App built with Zara.",
+  "image": "https://dummyimage.com/1200x628/0a0b0d/ffffff.png&text=OG",
+  "external_url": "https://a46026ac-7faf-45ed-bd53-ee9a7f4b7c71.vercel.app",
+  "properties": {
+    "app": {
+      "name": "Tracker Tokens",
+      "description": "Tracker Tokens is a Base Mini App built with Zara.",
+      "url": "https://a46026ac-7faf-45ed-bd53-ee9a7f4b7c71.vercel.app",
+      "icon": "https://0co.to/images/zara-2.png"
+    }
+  }
+}

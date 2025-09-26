@@ -1,0 +1,30 @@
+{
+  "accountAssociation": {
+    "header": "",
+    "payload": "",
+    "signature": ""
+  },
+  "frame": {
+    "version": "1",
+    "name": "Tracker Tokens",
+    "subtitle": "Built with Zara",
+    "description": "Tracker Tokens is a Base Mini App built with Zara.",
+    "iconUrl": "https://0co.to/images/zara-2.png",
+    "homeUrl": "https://a46026ac7faf45edbd53ee9a7f4b7c71-w4um.vercel.app",
+    "splashImageUrl": "https://a46026ac7faf45edbd53ee9a7f4b7c71-w4um.vercel.app/splash.png",
+    "splashBackgroundColor": "#000000",
+    "heroImageUrl": "https://a46026ac7faf45edbd53ee9a7f4b7c71-w4um.vercel.app/image.png",
+    "tagline": "Tracker Tokens",
+    "screenshotUrls": [
+      "https://a46026ac7faf45edbd53ee9a7f4b7c71-w4um.vercel.app/screenshot.png",
+      "https://a46026ac7faf45edbd53ee9a7f4b7c71-w4um.vercel.app/screenshot.png"
+    ],
+    "primaryCategory": "social",
+    "tags": [
+      "base",
+      "miniapp",
+      "onchainkit"
+    ],
+    "webhookUrl": "https://a46026ac7faf45edbd53ee9a7f4b7c71-w4um.vercel.app/api/webhook"
+  }
+}
