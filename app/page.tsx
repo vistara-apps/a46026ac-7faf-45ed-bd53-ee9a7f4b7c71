@@ -56,21 +56,61 @@ export default function HomePage() {
         {/* Quick Actions */}
         <div className="glass-card p-6">
           <h3 className="text-lg font-semibold text-fg mb-4">Quick Actions</h3>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <button className="btn-primary text-center">
               Enable Advanced Blocking
             </button>
-            
+
             <button className="btn-secondary text-center">
               View Privacy Report
             </button>
-            
-            <button className="btn-secondary text-center">
+
+            <button
+              className="btn-secondary text-center"
+              onClick={async () => {
+                try {
+                  const response = await fetch('/api/breach-check', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      userId: 'fc_fid_123',
+                      email: 'user@example.com' // In production, get from user input
+                    }),
+                  });
+
+                  if (response.ok) {
+                    const result = await response.json();
+                    alert(result.message);
+                  } else {
+                    alert('Failed to check data breaches');
+                  }
+                } catch (error) {
+                  console.error('Error checking breaches:', error);
+                  alert('Error checking data breaches');
+                }
+              }}
+            >
               Check Data Breaches
             </button>
-            
-            <button className="btn-secondary text-center">
+
+            <button
+              className="btn-secondary text-center"
+              onClick={async () => {
+                try {
+                  const response = await fetch('/api/tokens?userId=fc_fid_123&limit=50');
+                  if (response.ok) {
+                    const data = await response.json();
+                    // In production, show a modal or navigate to a dedicated page
+                    console.log('Token history:', data);
+                    alert(`Token History: ${data.transactions.length} transactions\nEarned: ${data.totals.earned} TT\nSpent: ${data.totals.spent} TT`);
+                  }
+                } catch (error) {
+                  console.error('Error fetching token history:', error);
+                  alert('Error loading token history');
+                }
+              }}
+            >
               Export Token History
             </button>
           </div>

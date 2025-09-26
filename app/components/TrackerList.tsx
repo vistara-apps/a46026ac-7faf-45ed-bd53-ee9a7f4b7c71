@@ -20,64 +20,30 @@ export function TrackerList({ variant = 'detailed' }: TrackerListProps) {
   const [trackers, setTrackers] = useState<TrackerData[]>([]);
   const [totalBlocked, setTotalBlocked] = useState(0);
   const [blockingPercentage, setBlockingPercentage] = useState(87);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate tracker data
-    const mockTrackers: TrackerData[] = [
-      {
-        id: '1',
-        domain: 'google-analytics.com',
-        type: 'analytics',
-        blocked: true,
-        attempts: 23,
-        lastSeen: new Date(Date.now() - 1000 * 60 * 5)
-      },
-      {
-        id: '2',
-        domain: 'facebook.com',
-        type: 'social',
-        blocked: true,
-        attempts: 15,
-        lastSeen: new Date(Date.now() - 1000 * 60 * 2)
-      },
-      {
-        id: '3',
-        domain: 'doubleclick.net',
-        type: 'advertising',
-        blocked: true,
-        attempts: 31,
-        lastSeen: new Date(Date.now() - 1000 * 60 * 1)
-      },
-      {
-        id: '4',
-        domain: 'amazon-adsystem.com',
-        type: 'advertising',
-        blocked: false,
-        attempts: 8,
-        lastSeen: new Date(Date.now() - 1000 * 60 * 3)
-      },
-      {
-        id: '5',
-        domain: 'fingerprintjs.com',
-        type: 'fingerprinting',
-        blocked: true,
-        attempts: 12,
-        lastSeen: new Date(Date.now() - 1000 * 60 * 4)
+    const fetchTrackerData = async () => {
+      try {
+        const response = await fetch('/api/trackers?userId=fc_fid_123');
+        if (response.ok) {
+          const trackerData = await response.json();
+          setTrackers(trackerData);
+          const blocked = trackerData.filter((t: TrackerData) => t.blocked).length;
+          setTotalBlocked(blocked);
+          setBlockingPercentage(Math.round((blocked / trackerData.length) * 100));
+        }
+      } catch (error) {
+        console.error('Error fetching tracker data:', error);
+      } finally {
+        setIsLoading(false);
       }
-    ];
+    };
 
-    setTrackers(mockTrackers);
-    setTotalBlocked(mockTrackers.filter(t => t.blocked).length);
+    fetchTrackerData();
 
-    // Simulate real-time updates
-    const interval = setInterval(() => {
-      setTrackers(prev => prev.map(tracker => ({
-        ...tracker,
-        attempts: tracker.attempts + Math.floor(Math.random() * 3),
-        lastSeen: Math.random() > 0.8 ? new Date() : tracker.lastSeen
-      })));
-    }, 3000);
-
+    // Poll for updates every 10 seconds
+    const interval = setInterval(fetchTrackerData, 10000);
     return () => clearInterval(interval);
   }, []);
 

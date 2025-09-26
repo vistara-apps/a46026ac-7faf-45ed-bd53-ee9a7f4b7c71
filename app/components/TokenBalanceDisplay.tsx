@@ -10,18 +10,41 @@ interface TokenBalanceDisplayProps {
 export function TokenBalanceDisplay({ variant = 'default' }: TokenBalanceDisplayProps) {
   const [balance, setBalance] = useState(125.125);
   const [isEarning, setIsEarning] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Simulate token earning
+  // Fetch user data and token balance
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (Math.random() > 0.7) {
-        setIsEarning(true);
-        setBalance(prev => prev + Math.random() * 0.1);
-        setTimeout(() => setIsEarning(false), 2000);
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('/api/user?userId=fc_fid_123');
+        if (response.ok) {
+          const userData = await response.json();
+          setBalance(userData.tokenBalance);
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      } finally {
+        setIsLoading(false);
       }
-    }, 5000);
+    };
 
+    fetchUserData();
+
+    // Poll for updates every 30 seconds
+    const interval = setInterval(fetchUserData, 30000);
     return () => clearInterval(interval);
+  }, []);
+
+  // Simulate real-time earning notifications
+  useEffect(() => {
+    const earningInterval = setInterval(() => {
+      if (Math.random() > 0.8) {
+        setIsEarning(true);
+        setTimeout(() => setIsEarning(false), 3000);
+      }
+    }, 10000);
+
+    return () => clearInterval(earningInterval);
   }, []);
 
   if (variant === 'compact') {
